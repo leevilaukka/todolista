@@ -67,16 +67,18 @@ form.onsubmit = (e) => {
 
 // Clear done button
 clearDoneButton.onclick = () => {
-    // If all todos are done, alert user
-    if(!itemsLeft()){
-        return alert('Kaikki on jo tehty!');
-    }
-    
+
     // Get todos from local storage
     const todos = JSON.parse(localStorage.getItem('todos'))
     // Filter todos to get only unfinished todos
     const newTodos = todos.filter(todo => !todo.done);
-    
+    const doneTodos = todos.filter(todo => todo.done);
+
+    // If there are no done todos, alert user
+    if(doneTodos.length === 0){
+        return alert('Ei poistettavia kohteita');
+    }
+
     // Confirm user action
     const sure = confirm(`Haluatko varmasti poistaa valmiit kohteet? (${todos.length - newTodos.length} kappaletta)`);
 
@@ -90,7 +92,7 @@ clearDoneButton.onclick = () => {
 // Clear all todos- button
 clearAllButton.onclick = () => {
     // If there are no todos, alert user
-    if(!itemsLeft()){
+    if(itemsLeft() === 0){
         return alert('Ei poistettavia kohteita!');
     }
 

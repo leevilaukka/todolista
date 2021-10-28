@@ -2,17 +2,28 @@ import { todosLeft } from "./index.js";
 
 // Class definition for TodoItem
 export default class TodoItem {
+    // Class constructor for TodoItem
     constructor(text, color, createdAt, id, done = false) {
+        // Text from input or localStorage
         this.text = text;
+
+        // CreatedAt from localStorage or current time
         this.createdAt = createdAt || new Date().toLocaleString("fi-FI");
         this.done = done;
+
+        // Get "random" id or use id from localStorage
         this.id = id || new Date().getTime();
+
+        // Element to be returned
         this.element = this.createElement(text);
         this.doneButton = this.element.querySelector('.item-button');
+
+        // Color from input, localStorage or default
         this.color = color || '#fff';
         this.element.style.backgroundColor = this.color;
     }
 
+    // Method to create TodoItem element
     createElement(text) {
         console.log(this)
         // List item element
@@ -31,8 +42,10 @@ export default class TodoItem {
         time.className = 'item-time';
         time.textContent = this.createdAt;
 
+        // Div for buttons
         const buttonDiv = document.createElement('div')
         buttonDiv.className = 'item-button-div'
+
         // Done button
         const doneButton = document.createElement('button');
         doneButton.className = 'item-button';
@@ -43,6 +56,7 @@ export default class TodoItem {
         deleteButton.className = 'item-delete-button';
         deleteButton.textContent = `🗑️`;
 
+        // Double click event listener to edit item
         div.addEventListener("dblclick", () => {
             this.update();
             if (this.done) {
@@ -67,9 +81,6 @@ export default class TodoItem {
             this.remove();
         });
 
-        // Item text
-        
-
         // Append elements
         div.appendChild(span);
         div.appendChild(time);
@@ -77,11 +88,12 @@ export default class TodoItem {
         buttonDiv.appendChild(doneButton);
         buttonDiv.appendChild(deleteButton);
 
-
+        // Return element
         return div;
     }
 
 
+    // Method to save TodoItem to localStorage
     saveToStorage() {
         let todos;
         if (localStorage.getItem('todos') === null) {
@@ -94,42 +106,51 @@ export default class TodoItem {
         localStorage.setItem('todos', JSON.stringify(todos));
     }
 
+    // Method to remove TodoItem from localStorage
     removeFromStorage() {
         let todos = JSON.parse(localStorage.getItem('todos'));
+        // Loop through todos and remove item with matching id
         for (let i = 0; i < todos.length; i++) {
             if (todos[i].id == this.id) {
                 todos.splice(i, 1);
             }
         }
+        // Update localStorage
         localStorage.setItem('todos', JSON.stringify(todos));
         this.update()
     }
     
+    // Method to update TodoItem state in localStorage
     update() {
         this.done = !this.done;
         console.log('Update item');
         let todos = JSON.parse(localStorage.getItem('todos'));
+        // Loop through todos and update item with matching id
         for (let i = 0; i < todos.length; i++) {
             if (todos[i].id == this.id) {
                 todos[i].done = this.done;
             }
         }
 
+        // Update text in DOM
         if (this.done) {
             this.doneButton.textContent = '❌';
         } else {
             this.doneButton.textContent = '✔️';
         }
 
+        // Update TodosLeft
         if (todos.filter(item => item.done === false).length === 0) {
             todosLeft.textContent = 'Kaikki tehty! 🎉';
         } else {
             todosLeft.textContent = `${todos.filter(item => item.done === false).length} jäljellä`;
         }
 
+        // Update localStorage
         localStorage.setItem('todos', JSON.stringify(todos));
     }
 
+    // Method to remove TodoItem from DOM and localStorage
     remove() {
         this.element.remove();
         this.removeFromStorage();

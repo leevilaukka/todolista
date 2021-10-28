@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leevin Todo-lista</title>
+    <script type="module" src="./index.js" defer></script>
+    <script type="module" src="./TodoItem.js" defer></script>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+    <main>
+        <h1>Leevin TODO-lista</h1>
+        <form id="form">
+            <input name="text" autofocus minlength="3" id="textinput" type="text" required placeholder="Syötä tekstiä tähän..">
+            <input type="color" title="Valitse väri klikkaamalla" name="color" id="colorinput" value="#0F7173">
+            <button type="submit" id="submit"> Lisää </button>
+        </form>
+        <div id="list">
+            <!-- Tähän todoItemit -->
+        </div>
+        <div >
+            <p> <span id="todosleft"></span></p>
+            <button type="button" id="clearDone">Tyhjennä valmiit</button>
+            <button type="button" id="clearAll">Tyhjennä kaikki</button>
+        </div>
+    </main>
+</body>
+</html>
